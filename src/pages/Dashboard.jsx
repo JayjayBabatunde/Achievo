@@ -5,6 +5,7 @@ import DashboardNav from "../components/overviewComponents/DashboardNav";
 import { ThemeContext } from "../components/overviewComponents/ThemeContext";
 import { Outlet } from 'react-router-dom';
 
+
 export default function Dashboard() {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function Dashboard() {
             <div
                 className={`
                     transition-all duration-500 ease-in-out 
-                    ${isOpen ? "ml-[210px]" : "ml-[80px]"} 
+                    ${isOpen ? "ml-[210px]" : "ml-0 sm:ml-[80px]"} 
                     md:ps-6 md:pe-6 px-3 w-full
                 `}
             >

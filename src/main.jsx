@@ -10,8 +10,8 @@ import { ThemeProvider } from './components/overviewComponents/ThemeProvider.jsx
 import Goals from './pages/Goals.jsx';
 import OverviewPage from './pages/OverviewPage.jsx';
 import TrackGoals from './pages/TrackGoals.jsx';
-import { Provider } from 'react-redux';
-import store from './assets/redux/store.jsx';
+import Communities from './pages/Communities.jsx';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -24,6 +24,8 @@ const router = createBrowserRouter([
       { path: '', element: <OverviewPage /> },
       { path: 'goals', element: <Goals /> },
       { path: 'track-goals', element: <TrackGoals /> },
+      { path: 'communities', element: <Communities /> },
+
     ],
   },
 ]);
@@ -31,11 +33,12 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-      <ThemeProvider>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </Provider>
+    {/* <Provider store={store}> */}
+    <ThemeProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </ThemeProvider>
+    {/* </Provider> */}
   </StrictMode>,
 )
 

@@ -1,21 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { SignupSchema } from "../Schemas/index.jsx";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../components/firebase/firebase.jsx";
 
 import '../index.css';
+import { doc, setDoc } from "firebase/firestore";
 
 const onSubmit = async (values, actions, navigate) => {
   console.log(values);
 
-  // Save the signup data in localStorage
-  localStorage.setItem("userData", JSON.stringify(values));
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+    const user = userCredential.user;
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  actions.resetForm();
-  alert("Signup successful!");
 
-  // Redirect to login page
-  navigate('/login');
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      name: values.name,
+      email: values.email,
+      createdAt: new Date()
+    });
+
+    actions.resetForm();
+    alert("Signup successful");
+    navigate("/login");
+  } catch (error) {
+    console.error("Firebase signup Error", error.message);
+    alert(error.message);
+  }
 };
 
 export default function Signup() {

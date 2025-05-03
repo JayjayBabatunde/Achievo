@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../components/firebase/firebase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -7,21 +9,17 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const storedUser = JSON.parse(localStorage.getItem("userData"));
-
-    if (storedUser) {
-      if (email === storedUser.email && password === storedUser.password) {
-        setError("");
-        alert("Login successful!");
-        navigate("/dashboard"); 
-      } else {
-        setError("Invalid email or password. Please try again.");
-      }
-    } else {
-      setError("No user found. Please sign up first.");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setError("");
+      alert("Login successful");
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login error", err.message);
+      setError("Invalid email or password. Please try again.");
     }
   };
 
@@ -33,7 +31,7 @@ export default function Login() {
       <form onSubmit={handleLogin} className="flex flex-col justify-self-center mt-6 text-left w-[450px] p-10 shadow-lg">
         <h1 className="text-[#148359] font-bold text-3xl mb-5">Login</h1>
 
-        
+
 
         <label className="pt-2" htmlFor="email">Email Address:</label>
         <input

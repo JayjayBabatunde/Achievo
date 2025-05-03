@@ -13,6 +13,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     { icon: <Settings size={20} />, name: 'Settings', path: '/dashboard/settings' },
   ];
 
+
   const handleLogout = () => {
     navigate('/login');
   };
@@ -20,7 +21,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   return (
     <aside
       className={`
-        ${isOpen ? 'w-[210px]' : 'w-[80px]'} 
+        ${isOpen ? 'w-[210px]' : 'w-0 sm:w-[80px]'} 
         h-screen fixed overflow-hidden transition-all duration-500 ease-in-out border-r shadow-sm`}
     >
       <nav className="h-full flex flex-col justify-between">
@@ -76,3 +77,4 @@ Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
 };
+

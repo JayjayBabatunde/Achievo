@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import goalsReducer from '../store/goalSlice'
+// import { configureStore } from '@reduxjs/toolkit'
+// import goalsReducer from '../store/goalSlice'
 
-const store = configureStore({
-    reducer: {
-        goals: goalsReducer,
-    }
-})
+// const store = configureStore({
+//     reducer: {
+//         goals: goalsReducer,
+//     }
+// })
 
-export default store
+// export default store
