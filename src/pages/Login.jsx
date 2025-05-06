@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../components/firebase/firebase";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,9 +14,20 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({ uid: user.uid, email: user.email })
+      );
+
       setError("");
-      alert("Login successful");
+      toast.success("Login successful");
       navigate("/dashboard");
     } catch (err) {
       console.error("Login error", err.message);
@@ -26,14 +38,19 @@ export default function Login() {
   return (
     <div className="text-center p-7">
       <h1 className="text-4xl font-sans font-bold text-[#148359]">Archievo</h1>
-      <p className="p-4 text-xl">Join hundreds of users set and achieve their goals with ease.</p>
+      <p className="p-4 text-xl">
+        Join hundreds of users set and achieve their goals with ease.
+      </p>
 
-      <form onSubmit={handleLogin} className="flex flex-col justify-self-center mt-6 text-left w-[450px] p-10 shadow-lg">
+      <form
+        onSubmit={handleLogin}
+        className="flex flex-col justify-self-center mt-6 text-left w-[450px] p-10 shadow-lg"
+      >
         <h1 className="text-[#148359] font-bold text-3xl mb-5">Login</h1>
 
-
-
-        <label className="pt-2" htmlFor="email">Email Address:</label>
+        <label className="pt-2" htmlFor="email">
+          Email Address:
+        </label>
         <input
           className="ring-2 outline-[#148359] ring-[#148359] rounded-sm p-1 mt-2"
           type="email"
@@ -43,7 +60,9 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label className="pt-2" htmlFor="password">Password:</label>
+        <label className="pt-2" htmlFor="password">
+          Password:
+        </label>
         <input
           className="ring-2 outline-[#148359] ring-[#148359] rounded-sm p-1 mt-2"
           type="password"
@@ -56,11 +75,15 @@ export default function Login() {
         <button
           type="submit"
           className="bg-[#148359] p-2 rounded-sm hover:bg-slate-50 hover:text-[#148359] 
-          transition-all duration-150 ease-in-out font-semibold mt-5 text-white">
+          transition-all duration-150 ease-in-out font-semibold mt-5 text-white"
+        >
           Login
         </button>
         <p className="text-center mt-4">
-          Don’t have an account? <Link className="text-blue-500" to="/signup">Signup</Link>
+          Don’t have an account?{" "}
+          <Link className="text-blue-500" to="/signup">
+            Signup
+          </Link>
         </p>
       </form>
     </div>
