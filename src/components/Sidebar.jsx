@@ -1,27 +1,57 @@
-import { ArrowLeft, ArrowRight, BarChart, LayoutDashboard, LogOut, NotepadText, Plus, Settings, Users } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {
+  ArrowLeft,
+  ArrowRight,
+  BarChart,
+  LayoutDashboard,
+  LogOut,
+  NotepadText,
+  Plus,
+  Settings,
+  Users,
+} from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import PropTypes from "prop-types";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinks = [
-    { icon: <LayoutDashboard size={20} />, name: 'Overview', path: '/dashboard' },
-    { icon: <NotepadText size={20} />, name: 'Goals', path: '/dashboard/goals' },
-    { icon: <BarChart size={20} />, name: 'Track Goals', path: '/dashboard/track-goals' },
-    { icon: <Users size={20} />, name: 'Communities', path: '/dashboard/communities' },
-    { icon: <Settings size={20} />, name: 'Settings', path: '/dashboard/settings' },
+    {
+      icon: <LayoutDashboard size={20} />,
+      name: "Overview",
+      path: "/dashboard",
+    },
+    {
+      icon: <NotepadText size={20} />,
+      name: "Goals",
+      path: "/dashboard/goals",
+    },
+    {
+      icon: <BarChart size={20} />,
+      name: "Track Goals",
+      path: "/dashboard/track-goals",
+    },
+    {
+      icon: <Users size={20} />,
+      name: "Communities",
+      path: "/dashboard/communities",
+    },
+    {
+      icon: <Settings size={20} />,
+      name: "Settings",
+      path: "/dashboard/settings",
+    },
   ];
 
-
   const handleLogout = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <aside
       className={`
-        ${isOpen ? 'w-[210px]' : 'w-0 sm:w-[80px]'} 
+        ${isOpen ? "w-[210px]" : "w-0 sm:w-[80px]"} 
         h-screen fixed overflow-hidden transition-all duration-500 ease-in-out border-r shadow-sm`}
     >
       <nav className="h-full flex flex-col justify-between">
@@ -39,8 +69,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             {navLinks.map((link, index) => (
               <li
                 key={index}
-                className={`flex items-center hover:bg-blue-500 hover:text-white ${isOpen ? 'w-36 pe-3 justify-start' : 'w-10 justify-center'
-                  } p-1.5 rounded-sm cursor-pointer transition-all ease-out gap-2 font-sans text-[15px]`}
+                className={`flex items-center ${
+                  location.pathname === link.path
+                    ? "bg-blue-500 text-white"
+                    : "hover:bg-blue-500 hover:text-white"
+                } 
+                  ${isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"} 
+                  p-1.5 rounded-sm cursor-pointer transition-all ease-out gap-2 font-sans text-[15px]`}
                 onClick={() => navigate(link.path)}
               >
                 {link.icon}
@@ -52,8 +87,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
         <div className="flex flex-col gap-2 p-3 mb-6 items-center">
           <div
-            className={`flex items-center ${isOpen ? 'w-36 pe-3 justify-start' : 'w-10 justify-center'
-              } bg-blue-500 p-1.5 rounded-sm text-white cursor-pointer gap-2`}
+            className={`flex items-center ${
+              isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"
+            } 
+              bg-blue-500 p-1.5 rounded-sm text-white cursor-pointer gap-2`}
           >
             <Plus size={20} />
             {isOpen && <span>Add Goal</span>}
@@ -61,8 +98,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
           <div
             onClick={handleLogout}
-            className={`flex items-center ${isOpen ? 'w-36 pe-3 justify-start' : 'w-10 justify-center'
-              } hover:bg-red-500 hover:text-white text-red-500 p-1.5 rounded-sm cursor-pointer gap-2`}
+            className={`flex items-center ${
+              isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"
+            } 
+              hover:bg-red-500 hover:text-white text-red-500 p-1.5 rounded-sm cursor-pointer gap-2`}
           >
             <LogOut size={20} />
             {isOpen && <span>Logout</span>}
@@ -77,4 +116,3 @@ Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
 };
-
