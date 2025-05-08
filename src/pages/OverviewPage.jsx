@@ -4,24 +4,54 @@ import Overview from "../components/overviewComponents/Overview";
 import OverviewGoals from "../components/overviewComponents/OverviewGoals";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../components/overviewComponents/ThemeContext";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../components/firebase/firebase";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { db, auth } from "../components/firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import Loader from "../components/goalsComponent/Loader";
 
 export default function OverviewPage() {
   const [goals, setGoals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "goals"), (snapshot) => {
-      const goalsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setGoals(goalsData);
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        const userGoalsRef = collection(db, "users", currentUser.uid, "goals");
+        const q = query(userGoalsRef);
+
+        const unsubscribeSnapshot = onSnapshot(
+          q,
+          (snapshot) => {
+            const goalsData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setGoals(goalsData);
+            setIsLoading(false);
+          },
+          (error) => {
+            console.error("Error fetching goals:", error.message);
+            setIsLoading(false);
+          }
+        );
+
+        return () => unsubscribeSnapshot();
+      } else {
+        setIsLoading(false);
+      }
     });
 
-    return () => unsubscribe(); // clean up listener on unmount
+    return () => unsubscribeAuth();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div className={`${theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"} min-h-screen`}>

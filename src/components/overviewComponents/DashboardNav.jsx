@@ -5,6 +5,7 @@ import { ThemeContext } from "./ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import Loader from "../goalsComponent/Loader";
 
 export default function DashboardNav() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -51,7 +52,12 @@ export default function DashboardNav() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-screen overflow-hidden">
+        <Loader />
+      </div>
+
+    )
   }
 
   return (

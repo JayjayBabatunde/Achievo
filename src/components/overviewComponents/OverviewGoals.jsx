@@ -2,17 +2,15 @@ import { Calendar, Dot, Edit, Trash2 } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import Modal from "../goalsComponent/Modal";
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import { auth } from "../firebase/firebase";
 
 export default function OverviewGoals({ goals = [], setGoals }) {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteGoal, setDeleteGoal] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editGoal, setEditGoal] = useState(null);
-  const [deleteGoals, setDeleteGoals] = useState(() => {
-    return parseInt(localStorage.getItem("deletedGoals")) || 0;
-  });
 
   const openEditModal = (goal) => {
     setEditGoal(goal);
@@ -35,12 +33,16 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   };
 
   const handleToggleCompletion = async (goal) => {
-    const updatedGoal = { ...goal, completed: !goal.completed };
-    try {
-      await updateDoc(doc(db, "goals", goal.id), {
-        completed: updatedGoal.completed,
-      });
+    if (!auth.currentUser) {
+      console.error("No authenticated user found.");
+      return;
+    }
 
+    const userGoalsRef = doc(db, "users", auth.currentUser.uid, "goals", goal.id);
+    const updatedGoal = { ...goal, completed: !goal.completed };
+
+    try {
+      await updateDoc(userGoalsRef, { completed: updatedGoal.completed });
       const updatedGoals = goals.map((g) => (g.id === goal.id ? updatedGoal : g));
       setGoals(updatedGoals);
     } catch (error) {
@@ -49,16 +51,21 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   };
 
   const handleDeleteGoal = async () => {
-    try {
-      await deleteDoc(doc(db, "goals", deleteGoal.id));
-      const updatedGoals = goals.filter((goal) => goal.id !== deleteGoal.id);
-      setGoals(updatedGoals);
+    if (!auth.currentUser) {
+      console.error("No authenticated user found.");
+      return;
+    }
 
-      const newDeletedCount = deleteGoals + 1;
-      setDeleteGoals(newDeletedCount);
-      localStorage.setItem("deletedGoals", newDeletedCount);
+    try {
+      const userGoalsRef = doc(db, "users", auth.currentUser.uid, "goals", deleteGoal.id);
+      await updateDoc(userGoalsRef, { deleted: true });
+
+      const updatedGoals = goals.map((goal) =>
+        goal.id === deleteGoal.id ? { ...goal, deleted: true } : goal
+      );
+      setGoals(updatedGoals);
     } catch (error) {
-      console.error("Error deleting goal:", error.message);
+      console.error("Error marking goal as deleted:", error.message);
     }
     closeDeleteModal();
   };
@@ -75,7 +82,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
     };
 
     try {
-      await updateDoc(doc(db, "goals", editGoal.id), updatedGoal);
+      await updateDoc(doc(db, "users", auth.currentUser.uid, "goals", editGoal.id), updatedGoal);
       const updatedGoals = goals.map((goal) =>
         goal.id === editGoal.id ? updatedGoal : goal
       );
@@ -86,9 +93,15 @@ export default function OverviewGoals({ goals = [], setGoals }) {
     }
   };
 
+  const uniqueGoals = goals.filter(
+    (goal, index, self) => index === self.findIndex((g) => g.id === goal.id)
+  );
+
+  const visibleGoals = uniqueGoals.filter((goal) => !goal.deleted);
+
   return (
     <div className="font-sans m-2 grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mt-6 gap-5 w-full justify-start">
-      {goals.map((goal) => (
+      {visibleGoals.map((goal) => (
         <div
           key={goal.id}
           className={`border w-full rounded-md p-3 ${goal.completed ? "line-through opacity-50" : ""}`}
@@ -97,23 +110,26 @@ export default function OverviewGoals({ goals = [], setGoals }) {
             <span>
               <Dot
                 size={70}
-                className={`${goal.priority === "High"
-                  ? "text-red-500"
-                  : goal.priority === "Mid"
-                    ? "text-green-500"
-                    : goal.priority === "Low"
-                      ? "text-orange-500"
-                      : "text-black"}`}
+                className={
+                  goal.priority === "High"
+                    ? "text-red-500"
+                    : goal.priority === "Mid"
+                      ? "text-green-500"
+                      : goal.priority === "Low"
+                        ? "text-orange-500"
+                        : "text-black"
+                }
               />
             </span>
             <span
               className={`${goal.priority === "High"
-                ? "text-red-500 font-semibold uppercase"
+                ? "text-red-500"
                 : goal.priority === "Mid"
-                  ? "text-green-500 font-semibold uppercase"
+                  ? "text-green-500"
                   : goal.priority === "Low"
-                    ? "text-orange-500 font-semibold uppercase"
-                    : "text-black"}`}
+                    ? "text-orange-500"
+                    : "text-black"
+                } font-semibold uppercase`}
             >
               {goal.priority}
             </span>

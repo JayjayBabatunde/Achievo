@@ -4,28 +4,50 @@ import DonughtChart from '../components/goalsComponent/DonughtChart';
 import BarChart from '../components/goalsComponent/Barchart';
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../components/firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../components/firebase/firebase";
+import Loader from '../components/goalsComponent/Loader';
 
 export default function TrackGoals() {
     const [activeBtn, setActiveBtn] = useState(0);
-    const [goals, setGoals] = useState({ completed: 0, incomplete: 0 });
+    const [goals, setGoals] = useState({ completed: 0, incomplete: 0, deleted: 0 });
+    const [isLoading, setIsLoading] = useState(true); // State to track loading
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "goals"), (snapshot) => {
-            const goalsData = snapshot.docs.map((doc) => doc.data());
+        const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+            if (currentUser) {
+                const userGoalsRef = collection(db, "users", currentUser.uid, "goals");
+                const unsubscribe = onSnapshot(userGoalsRef, (snapshot) => {
+                    const goalsData = snapshot.docs.map((doc) => doc.data());
 
-            const completed = goalsData.filter((goal) => goal.completed).length;
-            const incomplete = goalsData.filter((goal) => !goal.completed).length;
+                    const completed = goalsData.filter((goal) => goal.completed).length;
+                    const incomplete = goalsData.filter((goal) => !goal.completed && !goal.deleted).length; // Exclude deleted goals from incomplete count
+                    const deleted = goalsData.filter((goal) => goal.deleted).length;
 
-            setGoals({ completed, incomplete });
+                    setGoals({ completed, incomplete, deleted });
+                    setIsLoading(false);
+                });
+
+                return () => unsubscribe();
+            } else {
+                setIsLoading(false);
+            }
         });
 
-        return () => unsubscribe();
+        return () => unsubscribeAuth();
     }, []);
 
     const toggleActive = (index) => {
         setActiveBtn(index);
     };
-    const deletedGoals = parseInt(localStorage.getItem("deletedGoals")) || 0;
+
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader />
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col justify-center items-center w-full">
@@ -46,18 +68,18 @@ export default function TrackGoals() {
                 {activeBtn === 0 && <PieChartData
                     completedGoals={goals.completed}
                     incompleteGoals={goals.incomplete}
-                    deletedGoals={deletedGoals}
+                    deletedGoals={goals.deleted}
                 />}
 
                 {activeBtn === 1 && <DonughtChart
                     completedGoals={goals.completed}
                     incompleteGoals={goals.incomplete}
-                    deletedGoals={deletedGoals}
+                    deletedGoals={goals.deleted}
                 />}
                 {activeBtn === 2 && <BarChart
                     completedGoals={goals.completed}
                     incompleteGoals={goals.incomplete}
-                    deletedGoals={deletedGoals}
+                    deletedGoals={goals.deleted}
                 />}
             </div>
         </div>

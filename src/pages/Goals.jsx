@@ -6,12 +6,10 @@ import { db, auth } from "../components/firebase/firebase";
 import {
   addDoc,
   collection,
-
   getDoc,
   onSnapshot,
   query,
   serverTimestamp,
-  where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -25,10 +23,8 @@ export default function Goals() {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        const q = query(
-          collection(db, "goals"),
-          where("userId", "==", currentUser.uid)
-        );
+        const userGoalsRef = collection(db, "users", currentUser.uid, "goals");
+        const q = query(userGoalsRef);
 
         const unsubscribeSnapshot = onSnapshot(
           q,
@@ -70,11 +66,11 @@ export default function Goals() {
       deadline: form.deadline.value,
       completed: false,
       createdAt: serverTimestamp(),
-      userId: user.uid,
     };
 
     try {
-      const docRef = await addDoc(collection(db, "goals"), newGoal);
+      const userGoalsRef = collection(db, "users", user.uid, "goals");
+      const docRef = await addDoc(userGoalsRef, newGoal);
       const addedDoc = await getDoc(docRef);
       setGoals((prev) => [...prev, { id: addedDoc.id, ...addedDoc.data() }]);
       closeModal();
