@@ -143,11 +143,18 @@ export default function ChatbotUI() {
     const generateBotResponse = async (history) => {
         // format chat history for API response
         const formattedHistory = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
 
         const systemPrompt = {
             role: "user",
             parts: [{
-                text: `You are Ava, a goal coach helping a user named ${userName}. Respond in a friendly and encouraging tone.`
+                text: `You are Ava, a goal coach helping a user named ${userName}. Respond in a friendly and encouraging tone. today is ${formattedDate}. When planning dates or setting timelines, base everything off this date.`
             }]
         };
 
@@ -227,17 +234,17 @@ export default function ChatbotUI() {
     }, [chatHistory]);
 
     return (
-        <div className="flex flex-col h-[85vh] w-full max-w-full mx-auto bg-white pt-3 rounded-lg overflow-hidden">
+        <div className="flex flex-col h-[85vh] w-full max-w-full mx-auto pt-3 rounded-lg overflow-hidden">
             <div ref={chatBodyRef} className="flex-1 overflow-y-auto custom-scrollbar pe-5">
                 {isLoading ? (
                     <div className="text-center py-4">Loading chat...</div>
                 ) : (
                     chatHistory.map((chat, index) => (
-                        <ChatMessage key={index} chat={chat} />
+                        <ChatMessage key={index} chat={chat} userName={userName} />
                     ))
                 )}
             </div>
-            <div className="p-4 border-t bg-white">
+            <div className="p-4 border-t">
                 <ChatForm
                     onUserSubmit={handleUserSubmit}
                 />

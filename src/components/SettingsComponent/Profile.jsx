@@ -10,6 +10,7 @@ import {
 } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Eye } from "lucide-react";
 
 // Generate initials-based avatar URL
 const generateInitialsAvatar = (name) => {
@@ -36,7 +37,9 @@ const ProfileSettings = () => {
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
-
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     useEffect(() => {
         const fetchUserData = async () => {
             const currentUser = auth.currentUser;
@@ -191,7 +194,7 @@ const ProfileSettings = () => {
         <div className="max-w-4xl py-3">
             <ToastContainer position="top-right" autoClose={5000} theme="colored" />
 
-            <h1 className="text-xl font-semibold text-gray-800 mb-6">Profile Settings</h1>
+            <h1 className="text-xl font-semibold  mb-6">Profile Settings</h1>
 
             <div className="py-3 mb-8">
                 <div className="flex flex-col md:flex-col">
@@ -204,7 +207,7 @@ const ProfileSettings = () => {
                                 className="w-32 h-32 rounded-full bg-gray-500 object-cover border-4 border-gray-200"
                             />
                         </div>
-                        <p className="text-xs text-gray-500 text-center my-2 mb-4">
+                        <p className="text-xs  text-center my-2 mb-4">
                             Your profile image is generated from your initials.
                         </p>
                     </div>
@@ -214,7 +217,7 @@ const ProfileSettings = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
                                 <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="name" className="block text-sm font-medium  mb-1">
                                         Username *
                                     </label>
                                     <input
@@ -223,13 +226,13 @@ const ProfileSettings = () => {
                                         value={userData.name}
                                         onChange={handleInputChange}
                                         className={`w-full px-3 py-2 border ${errors.name ? "border-red-500" : "border-gray-300"
-                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-black`}
                                     />
                                     {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name}</p>}
                                 </div>
 
                                 <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="email" className="block text-sm font-medium  mb-1">
                                         Email *
                                     </label>
                                     <input
@@ -238,14 +241,14 @@ const ProfileSettings = () => {
                                         value={userData.email}
                                         onChange={handleInputChange}
                                         className={`w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"
-                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-black`}
                                     />
                                     {errors.email && <p className="text-sm text-red-600 mt-1">{errors.email}</p>}
                                 </div>
                             </div>
 
                             <div className="mb-4">
-                                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                                <label htmlFor="bio" className="block text-sm font-medium  mb-1">
                                     Bio
                                 </label>
                                 <textarea
@@ -253,56 +256,64 @@ const ProfileSettings = () => {
                                     value={userData.bio}
                                     onChange={handleInputChange}
                                     rows="3"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-black"
                                 />
                             </div>
 
                             <div className="border-t border-gray-200 pt-4 mb-4">
-                                <h3 className="text-lg font-medium text-gray-800 mb-3">Change Password</h3>
+                                <h3 className="text-lg font-medium  mb-3">Change Password</h3>
 
-                                <div className="mb-4">
-                                    <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                                        Current Password
-                                    </label>
+                                <div className="relative">
                                     <input
-                                        type="password"
+                                        type={showCurrentPassword ? "text" : "password"}
                                         id="currentPassword"
                                         value={userData.currentPassword}
                                         onChange={handleInputChange}
                                         className={`w-full px-3 py-2 border ${errors.currentPassword ? "border-red-500" : "border-gray-300"
-                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                                            } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-black pr-10`}
                                         placeholder="Required to change password"
                                     />
-                                    {errors.currentPassword && <p className="text-sm text-red-600 mt-1">{errors.currentPassword}</p>}
+                                    <Eye
+                                        onClick={() => setShowCurrentPassword(prev => !prev)}
+                                        className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                                    />
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-                                    <div>
-                                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2 mt-7">
+                                    <div className="relative">
+                                        <label htmlFor="newPassword" className="block text-sm font-medium mb-1">
                                             New Password
                                         </label>
                                         <input
-                                            type="password"
+                                            type={showNewPassword ? "text" : "password"}
                                             id="newPassword"
                                             value={userData.newPassword}
                                             onChange={handleInputChange}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-teal-500 pr-10"
                                             placeholder="Leave blank to keep current"
+                                        />
+                                        <Eye
+                                            onClick={() => setShowNewPassword(prev => !prev)}
+                                            className="absolute right-3 top-9 text-gray-500 cursor-pointer"
                                         />
                                     </div>
 
-                                    <div>
-                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <div className="relative">
+                                        <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
                                             Confirm New Password
                                         </label>
                                         <input
-                                            type="password"
+                                            type={showConfirmPassword ? "text" : "password"}
                                             id="confirmPassword"
                                             value={userData.confirmPassword}
                                             onChange={handleInputChange}
                                             className={`w-full px-3 py-2 border ${errors.confirmPassword ? "border-red-500" : "border-gray-300"
-                                                } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500`}
+                                                } rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 text-black pr-10`}
                                             placeholder="Confirm new password"
+                                        />
+                                        <Eye
+                                            onClick={() => setShowConfirmPassword(prev => !prev)}
+                                            className="absolute right-3 top-9 text-gray-500 cursor-pointer"
                                         />
                                         {errors.confirmPassword && <p className="text-sm text-red-600 mt-1">{errors.confirmPassword}</p>}
                                     </div>

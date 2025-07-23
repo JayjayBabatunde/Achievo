@@ -22,7 +22,7 @@ export default function Dashboard() {
         <div
             className={`
                 ${theme === "light" ? "bg-white text-black" : "bg-black text-white"}
-                w-full flex transition-all duration-500 ease-in-out
+                w-full flex transition-all duration-500 ease-in-out min-h-screen
             `}
         >
 

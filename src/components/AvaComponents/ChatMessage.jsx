@@ -1,12 +1,28 @@
-import { FiThumbsUp, FiThumbsDown, FiVolume2, FiRefreshCw, FiCopy, FiCheck, } from "react-icons/fi";
+import { FiThumbsUp, FiThumbsDown, FiVolume2, FiCopy, FiCheck, } from "react-icons/fi";
 import React, { useState } from "react";
-import { FaRobot, FaStop, FaUserCircle } from "react-icons/fa";
+import { FaRobot, FaStop, } from "react-icons/fa";
 
-export default function ChatMessage({ chat }) {
+
+const generateInitialsAvatar = (name) => {
+    const nameParts = name.split(' ');
+    const initials = nameParts
+        .map(part => part.charAt(0))
+        .join('')
+        .toUpperCase()
+        .substring(0, 2);
+
+    return `https://ui-avatars.com/api/?name=${initials}&background=random&color=fff&size=128`;
+};
+
+
+export default function ChatMessage({ chat, userName }) {
     const [copied, setCopied] = useState(false);
     const [liked, setLiked] = useState(false);
     const [disliked, setDisliked] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    // const [url, setUrl] = useState(null);
+
+
 
     const handleCopy = async () => {
         if (chat.text) {
@@ -78,7 +94,7 @@ export default function ChatMessage({ chat }) {
                     `}
                     >
                         <span>
-                            {chat.text.split('\n').map((line, idx) => (
+                            {(chat.text || "").split('\n').map((line, idx) => (
                                 <React.Fragment key={idx}>
                                     {line}
                                     <br />
@@ -87,7 +103,11 @@ export default function ChatMessage({ chat }) {
                         </span>
                     </div>
                     {chat.role === "user" && (
-                        <FaUserCircle size={22} className="text-teal-600 mt-1 order-3" />
+                        <img
+                            src={generateInitialsAvatar(userName || "User")}
+                            alt="User Avatar"
+                            className="w-8 h-8 rounded-full order-3"
+                        />
                     )}
                 </div>
                 {chat.role === 'model' && (

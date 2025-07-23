@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, SearchIcon } from "lucide-react";
 import Modal from "../components/goalsComponent/Modal";
 import OverviewGoals from "../components/overviewComponents/OverviewGoals";
 import { useEffect, useState } from "react";
@@ -12,8 +12,11 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import GoalHeader from "../components/overviewComponents/SearchGoal";
 
 export default function Goals() {
+  const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [goals, setGoals] = useState([]);
   const [user, setUser] = useState(null);
@@ -87,13 +90,23 @@ export default function Goals() {
         <h1 className="font-bold sm:text-2xl text-[16px] cursor-pointer">
           Add New Goal
         </h1>
-        <button
-          onClick={openModal}
-          className="bg-teal-500 sm:p-2 p-1.5 text-sm sm:text-[15px] flex items-center justify-center gap-1 text-white rounded-sm font-semibold"
-        >
-          <Plus size={20} /> Add Goal
-        </button>
+        <div className="flex gap-6 items-center">
+
+          <span className="hover:bg-teal-500 hover:text-white p-2 rounded-full cursor-pointer"
+            onClick={() => setShowSearch((prev) => !prev)}>
+            <SearchIcon size={20} />
+          </span>
+
+          <button
+            onClick={openModal}
+            className="bg-teal-500 sm:p-2 p-1.5 text-sm sm:text-[15px] flex items-center justify-center gap-1 text-white rounded-sm font-semibold"
+          >
+            <Plus size={20} /> Add Goal
+          </button>
+        </div>
+
       </div>
+
 
       <Modal isOpen={isModalOpen} onclose={closeModal}>
         <form onSubmit={handleAddGoal}>
@@ -162,7 +175,20 @@ export default function Goals() {
         </form>
       </Modal>
 
-      <OverviewGoals goals={goals} setGoals={setGoals} />
+      {showSearch &&
+        <GoalHeader search={search} setSearch={setSearch} />
+      }
+      <OverviewGoals
+        goals={goals.filter((goal) => {
+          const title = goal.title || "";
+          const description = goal.description || "";
+          return (
+            title.toLowerCase().includes(search.toLowerCase()) ||
+            description.toLowerCase().includes(search.toLowerCase())
+          );
+        })}
+        setGoals={setGoals}
+      />
     </div>
   );
 }

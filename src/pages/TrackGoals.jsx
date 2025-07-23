@@ -56,7 +56,7 @@ export default function TrackGoals() {
                     <button
                         key={index}
                         onClick={() => toggleActive(index)}
-                        className={`border text-black hover:text-white hover:bg-teal-500 hover:border-none rounded-md px-4 py-1.5 ${activeBtn === index ? 'bg-teal-500 text-white' : 'bg-none'
+                        className={`border hover:text-white hover:bg-teal-500 hover:border-none rounded-md px-4 py-1.5 ${activeBtn === index ? 'bg-teal-500 text-white' : 'bg-none'
                             }`}
                     >
                         {item}

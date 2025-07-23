@@ -31,3 +31,29 @@ body {
   background: #e5e7eb;
   /* gray-200 */
 }
+
+.input-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.input-scrollbar::-webkit-scrollbar-thumb {
+  background: #fff transparent;
+  /* teal-400 */
+  border-radius: 8px;
+}
+
+.input-scrollbar::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  /* gray-200 */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE 10+ */
+}
