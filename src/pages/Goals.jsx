@@ -89,7 +89,7 @@ export default function Goals() {
         </h1>
         <button
           onClick={openModal}
-          className="bg-blue-500 sm:p-2 p-1.5 text-sm sm:text-[15px] flex items-center justify-center gap-1 text-white rounded-sm font-semibold"
+          className="bg-teal-500 sm:p-2 p-1.5 text-sm sm:text-[15px] flex items-center justify-center gap-1 text-white rounded-sm font-semibold"
         >
           <Plus size={20} /> Add Goal
         </button>
@@ -148,7 +148,7 @@ export default function Goals() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+            <button className="mt-4 px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-700">
               Add
             </button>
             <button

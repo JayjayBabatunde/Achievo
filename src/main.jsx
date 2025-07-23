@@ -12,6 +12,8 @@ import OverviewPage from './pages/OverviewPage.jsx';
 import TrackGoals from './pages/TrackGoals.jsx';
 import Communities from './pages/Communities.jsx';
 import { ToastContainer } from 'react-toastify';
+import Settings from './pages/Settings.jsx';
+import AvaChatbot from './pages/AvaChatbot.jsx';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -25,6 +27,8 @@ const router = createBrowserRouter([
       { path: 'goals', element: <Goals /> },
       { path: 'track-goals', element: <TrackGoals /> },
       { path: 'communities', element: <Communities /> },
+      { path: 'settings', element: <Settings /> },
+      { path: 'Ava-assistant', element: <AvaChatbot /> },
 
     ],
   },

@@ -31,7 +31,9 @@ export default function Login() {
       navigate("/dashboard");
     } catch (err) {
       console.error("Login error", err.message);
-      setError("Invalid email or password. Please try again.");
+      // setError("Invalid email or password. Please try again.");
+      toast.error("Unable to Login, check your Internet connection and try again!!");
+
     }
   };
 

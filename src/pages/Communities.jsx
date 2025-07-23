@@ -47,7 +47,7 @@ export default function Communities() {
 
     return (
         <div>
-            <div className="flex justify-between items-center border p-3 rounded-md mb-3 h-max">
+            <div className="flex justify-between items-center  p-3 rounded-md mb-3 h-max">
                 <h1 className="font-bold text-xl">Join a Commmunity</h1>
 
                 <input className="rounded-md text-black border w-[450px] p-2" type="search" placeholder="search community" />
@@ -63,7 +63,7 @@ export default function Communities() {
                                 <p className="text-[14px]">{community.description}</p>
                                 <div className="flex justify-between my-2 items-center">
                                     <span className="text-[14px] text-gray-600 font-semibold">{community.members}</span>
-                                    <button className="bg-blue-500 rounded-md w-[140px] px-3 py-1 text-white">Join</button>
+                                    <button className="bg-teal-500 rounded-md w-[140px] px-3 py-1 text-white">Join</button>
                                 </div>
                             </div>
                         </div>

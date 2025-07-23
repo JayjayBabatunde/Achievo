@@ -1,22 +1,32 @@
 import './App.css';
-import ContactForm from './components/ContactForm';
-import Features from './components/Features';
-import Footer from './components/Footer';
-import Nav from './components/Nav';
-import Showcase from './components/Showcase';
-import Testimonial from './components/Testimonial';
+import Benefits from './components/landingPageComponents/Benefits';
+import Nav from './components/landingPageComponents/Nav';
+import Showcase from './components/landingPageComponents/Showcase';
+import Features from './components/landingPageComponents/Features'
+
 
 function App() {
   return (
     <div className="h-screen overflow-x-hidden flex flex-col">
-      <Nav />
-      <Showcase />
+      <div className="relative min-h-[100vh] bg-[url(/bg.jpg)] bg-cover bg-no-repeat bg-center overflow-hidden">
+        <div className="absolute bg-gradient-to-b from-black/60 to-transparent -z-10"></div>
+
+        <Nav />
+        <Showcase />
+      </div>
+
+
+      <div className='pt-[50px]'>
+        <Benefits />
+      </div>
       <Features />
-      <Testimonial />
+      {/* <Testimonial />
       <ContactForm />
-      <Footer />
+      <Footer /> */}
     </div>
   );
 }
 
 export default App;
+
+// https://coolors.co/gradients

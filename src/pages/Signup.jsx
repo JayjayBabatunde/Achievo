@@ -1,33 +1,54 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { SignupSchema } from "../Schemas/index.jsx";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../components/firebase/firebase.jsx";
-
-import '../index.css';
 import { doc, setDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
+import '../index.css';
 
 const onSubmit = async (values, actions, navigate) => {
-  console.log(values);
-
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      values.email,
+      values.password
+    );
+
     const user = userCredential.user;
 
+    // Generate initials for avatar
+    const nameParts = values.name.split(' ');
+    const initials = nameParts
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
 
+    // Create initial avatar URL
+    const initialAvatar = `https://ui-avatars.com/api/?name=${initials}&background=random&color=fff&size=128`;
+
+    // Update user profile with name and initial avatar
+    await updateProfile(user, {
+      displayName: values.name,
+      photoURL: initialAvatar
+    });
+
+    // Save to Firestore
     await setDoc(doc(db, "users", user.uid), {
       uid: user.uid,
       name: values.name,
       email: values.email,
+      photoURL: initialAvatar,
       createdAt: new Date()
     });
 
     actions.resetForm();
-    alert("Signup successful");
+    toast.success("Signup successful");
     navigate("/login");
   } catch (error) {
     console.error("Firebase signup Error", error.message);
-    alert(error.message);
+    toast.error("Unable to Signup check your Internet connection and try again!!");
   }
 };
 
@@ -53,31 +74,46 @@ export default function Signup() {
         <h1 className="text-[#148359] font-bold text-3xl mb-5">Signup</h1>
 
         <label className="pt-2" htmlFor="name">Username:</label>
-        <input value={values.name}
+        <input
+          value={values.name}
           onChange={handleChange}
           onBlur={handleBlur}
           className={`p-1 mt-2 rounded-md border-2 border-[#148359] ${errors.name && touched.name ? 'outline-red-500' : 'outline-[#148359]'}`}
-          type="text" name="name" id="name" />
+          type="text"
+          name="name"
+          id="name"
+        />
         {errors.name && touched.name && <p className="error">{errors.name}</p>}
 
         <label className="pt-2" htmlFor="email">Email Address:</label>
-        <input value={values.email}
+        <input
+          value={values.email}
           onChange={handleChange}
           onBlur={handleBlur}
           className={`p-1 mt-2 rounded-md border-2 border-[#148359] ${errors.email && touched.email ? 'outline-red-500' : 'outline-[#148359]'}`}
-          type="email" name="email" id="email" />
+          type="email"
+          name="email"
+          id="email"
+        />
         {errors.email && touched.email && <p className="error">{errors.email}</p>}
 
         <label className="pt-2" htmlFor="password">Password:</label>
-        <input value={values.password}
+        <input
+          value={values.password}
           onChange={handleChange}
           onBlur={handleBlur}
           className={`p-1 mt-2 rounded-md border-2 border-[#148359] ${errors.password && touched.password ? 'outline-red-500' : 'outline-[#148359]'}`}
-          type="password" name="password" id="password" />
+          type="password"
+          name="password"
+          id="password"
+        />
         {errors.password && touched.password && <p className="error">{errors.password}</p>}
 
-        <button disabled={isSubmitting} type="submit"
-          className="bg-[#148359] p-2 rounded-sm hover:bg-slate-50 hover:text-[#148359] transition-all duration-150 ease-in-out font-semibold mt-8 text-white">
+        <button
+          disabled={isSubmitting}
+          type="submit"
+          className="bg-[#148359] p-2 rounded-sm hover:bg-slate-50 hover:text-[#148359] transition-all duration-150 ease-in-out font-semibold mt-8 text-white"
+        >
           Signup
         </button>
         <p className="text-center mt-4">Already have an account? <Link className="text-blue-500" to='/login'>Login</Link></p>

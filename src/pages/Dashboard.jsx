@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/landingPageComponents/Sidebar";
 import DashboardNav from "../components/overviewComponents/DashboardNav";
 import { ThemeContext } from "../components/overviewComponents/ThemeContext";
 import { Outlet } from 'react-router-dom';

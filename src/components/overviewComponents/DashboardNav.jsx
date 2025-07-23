@@ -4,12 +4,13 @@ import '../../App.css';
 import { ThemeContext } from "./ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import Loader from "../goalsComponent/Loader";
 
 export default function DashboardNav() {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [userName, setUserName] = useState();
+  const [photoURL, setPhotoURL] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -24,22 +25,41 @@ export default function DashboardNav() {
   ];
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    let unsubscribeSnapshot = () => { }; // No-op function for cleanup
+
+    const unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserName(docSnap.data().name);
-        } else {
-          console.log("No such document!");
-        }
+
+        // Detach any previous listener
+        unsubscribeSnapshot();
+
+        // Use onSnapshot for real-time updates
+        unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
+          if (docSnap.exists()) {
+            const userData = docSnap.data();
+            setUserName(userData.name || user.displayName);
+            setPhotoURL(userData.photoURL || user.photoURL);
+          } else {
+            console.log("User document not found, using Auth data.");
+            setUserName(user.displayName);
+            setPhotoURL(user.photoURL);
+          }
+          setIsLoading(false);
+        }, (error) => {
+          console.error("Error with snapshot listener:", error);
+          setIsLoading(false);
+        });
       } else {
         navigate("/login");
+        setIsLoading(false);
       }
-      setIsLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeAuth();
+      unsubscribeSnapshot();
+    };
   }, [navigate]);
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
@@ -69,7 +89,11 @@ export default function DashboardNav() {
             <span className="cursor-pointer" onClick={toggleTheme}>
               {theme === 'light' ? <Sun size={20} /> : <Moon size={20} />}
             </span>
-            <img className="sm:w-8 sm:h-8 w-5 h-5 rounded-full" src="/profile.jpg" alt="Profile img" />
+            <img
+              className="sm:w-8 sm:h-8 w-5 h-5 rounded-full object-cover bg-gray-300"
+              src={photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+              alt="Profile img"
+            />
             <span className="font-semibold sm:text-[16px] text-sm font-sans">{userName || "Loading..."}</span>
           </div>
 
