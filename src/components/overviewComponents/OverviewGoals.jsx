@@ -11,6 +11,9 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   const [deleteGoal, setDeleteGoal] = useState(null);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [editGoal, setEditGoal] = useState(null);
+  const [isEditGoalLoading, setIsEditGoalLoading] = useState(false);
+  const [isDeleteGoalLoading, setIsDeleteGoalLoading] = useState(false);
+
 
   const openEditModal = (goal) => {
     setEditGoal(goal);
@@ -51,6 +54,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   };
 
   const handleDeleteGoal = async () => {
+    setIsDeleteGoalLoading(true);
     if (!auth.currentUser) {
       console.error("No authenticated user found.");
       return;
@@ -66,6 +70,9 @@ export default function OverviewGoals({ goals = [], setGoals }) {
       setGoals(updatedGoals);
     } catch (error) {
       console.error("Error marking goal as deleted:", error.message);
+    } finally {
+      setIsDeleteGoalLoading(false);
+
     }
     closeDeleteModal();
   };
@@ -73,6 +80,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   const handleEditGoal = async (e) => {
     e.preventDefault();
     const form = e.target;
+    setIsEditGoalLoading(true);
     const updatedGoal = {
       ...editGoal,
       title: form.title.value,
@@ -90,6 +98,8 @@ export default function OverviewGoals({ goals = [], setGoals }) {
       closeEditModal();
     } catch (error) {
       console.error("Error editing goal:", error.message);
+    } finally {
+      setIsEditGoalLoading(false);
     }
   };
 
@@ -169,6 +179,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
         </div>
       ))}
 
+      {/* MODAL TO DELETE GOAL */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-4 py-9 px-5 rounded-md">
@@ -176,11 +187,39 @@ export default function OverviewGoals({ goals = [], setGoals }) {
               Are you sure you want to delete this goal?
             </h2>
             <div className="flex justify-end gap-4 mt-4">
-              <button
+              <button disabled={isDeleteGoalLoading}
                 className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
                 onClick={handleDeleteGoal}
               >
-                Yes
+                {isDeleteGoalLoading ? (
+                  <>
+                    <div className="flex items-center justify-center gap-2">
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Deleting...
+                    </div>
+                  </>
+                ) : (
+                  "Yes"
+                )}
               </button>
               <button
                 className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
@@ -193,6 +232,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
         </div>
       )}
 
+      {/* MODAL TO EDIT GOAL */}
       {isEditModalOpen && (
         <Modal isOpen={isEditModalOpen} onclose={closeEditModal}>
           <form onSubmit={handleEditGoal}>
@@ -250,8 +290,36 @@ export default function OverviewGoals({ goals = [], setGoals }) {
               defaultValue={editGoal.deadline}
               required
             />
-            <button className="w-full bg-blue-500 text-white rounded-md mt-3 py-2">
-              Save Changes
+            <button disabled={isEditGoalLoading} className="w-full bg-blue-500 text-white rounded-md mt-3 py-2">
+              {isEditGoalLoading ? (
+                <>
+                  <div className="flex items-center justify-center gap-2">
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Editting...
+                  </div>
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </form>
         </Modal>
