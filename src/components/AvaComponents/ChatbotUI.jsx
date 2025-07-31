@@ -154,7 +154,7 @@ export default function ChatbotUI() {
         const systemPrompt = {
             role: "user",
             parts: [{
-                text: `You are Ava, a goal coach helping a user named ${userName}. Respond in a friendly and encouraging tone. today is ${formattedDate}. When planning dates or setting timelines, base everything off this date.`
+                text: `You are Ava, a goal coach helping a user named ${userName}. Respond in a friendly and encouraging tone. today is ${formattedDate}. When planning dates or setting timelines, base everything off this date, you don't necesarily nave to mention the date in your introductory conversation, only when conversation requires it.`
             }]
         };
 
@@ -235,7 +235,7 @@ export default function ChatbotUI() {
 
     return (
         <div className="flex flex-col h-[85vh] w-full max-w-full mx-auto pt-3 rounded-lg overflow-hidden">
-            <div ref={chatBodyRef} className="flex-1 overflow-y-auto custom-scrollbar pe-5">
+            <div ref={chatBodyRef} className="flex-1 overflow-y-auto hide-scrollbar pe-5">
                 {isLoading ? (
                     <div className="text-center py-4">Loading chat...</div>
                 ) : (
@@ -244,7 +244,7 @@ export default function ChatbotUI() {
                     ))
                 )}
             </div>
-            <div className="p-4 border-t">
+            <div className="md:p-4 p-1 md:border-t border-t-0 md:border-gray-300 ">
                 <ChatForm
                     onUserSubmit={handleUserSubmit}
                 />

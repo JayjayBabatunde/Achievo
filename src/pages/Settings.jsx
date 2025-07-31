@@ -6,8 +6,8 @@ export default function Settings() {
         <div className="mx-5">
             <h1 className="font-bold text-xl">Settings</h1>
 
-            <div className="flex gap-20 py-5">
-                <div className="w-2/3">
+            <div className="flex sm:flex-row flex-col gap-20 py-5">
+                <div className="sm:w-2/3 w-full">
                     <ProfileSettings />
                 </div>
 

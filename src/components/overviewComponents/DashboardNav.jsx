@@ -22,6 +22,11 @@ export default function DashboardNav() {
     { icon: <BarChart size={20} />, name: 'Track Goals', path: '/dashboard/track-goals' },
     { icon: <Users size={20} />, name: 'Communities', path: '/dashboard/communities' },
     { icon: <Settings size={20} />, name: 'Settings', path: '/dashboard/settings' },
+    {
+      icon: <span className="text-xl">🤖</span>,
+      name: "AI Assistant",
+      path: "/dashboard/Ava-assistant",
+    },
   ];
 
   useEffect(() => {
@@ -108,12 +113,12 @@ export default function DashboardNav() {
 
       {/* Sidebar Links for Mobile Screens */}
       {isSidebarOpen && (
-        <div className="fixed top-0 left-0 w-[100%] p-10 h-full bg-white shadow-lg z-40 sm:hidden">
+        <div className={`fixed top-0 left-0 w-[100%] p-10 h-full shadow-lg z-40 sm:hidden ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
           <ul className="flex flex-col p-4 gap-10">
             {navLinks.map((link, index) => (
               <li
                 key={index}
-                className="flex items-center gap-2 cursor-pointer hover:bg-blue-500 hover:text-white p-2 rounded-sm"
+                className="flex items-center gap-2 cursor-pointer hover:bg-blue-500  p-2 rounded-sm"
                 onClick={() => {
                   navigate(link.path);
                   setIsSidebarOpen(false);
@@ -136,9 +141,10 @@ export default function DashboardNav() {
               <span>Logout</span>
             </div>
           </ul>
-        </div>
+        </div >
 
-      )}
+      )
+      }
 
     </>
   );

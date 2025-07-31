@@ -47,10 +47,10 @@ export default function Communities() {
 
     return (
         <div>
-            <div className="flex justify-between items-center  p-3 rounded-md mb-3 h-max">
-                <h1 className="font-bold text-xl">Join a Commmunity</h1>
+            <div className="flex sm:flex-row flex-col justify-between items-center  p-3 rounded-md mb-3 h-max">
+                <h1 className="font-bold text-xl ">Join a Commmunity</h1>
 
-                <input className="rounded-md text-black border w-[450px] p-2" type="search" placeholder="search community" />
+                <input className="rounded-md text-black border sm:w-[450px] w-full p-2 sm:mt-0 mt-5" type="search" placeholder="search community" />
             </div>
 
             <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 mt-4 gap-4">

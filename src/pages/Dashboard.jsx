@@ -21,7 +21,7 @@ export default function Dashboard() {
     return (
         <div
             className={`
-                ${theme === "light" ? "bg-white text-black" : "bg-black text-white"}
+                ${theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"}
                 w-full flex transition-all duration-500 ease-in-out min-h-screen
             `}
         >
@@ -38,7 +38,7 @@ export default function Dashboard() {
             >
 
                 <DashboardNav />
-                <div className="border rounded-md p-4">
+                <div className="rounded-md p-2">
                     <Outlet />
 
                 </div>

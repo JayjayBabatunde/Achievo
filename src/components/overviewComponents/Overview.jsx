@@ -34,9 +34,9 @@ export default function Overview() {
   }, []);
 
   return (
-    <div>
+    <div className="sm:pl-5 sm:pr-2">
       <h1 className="font-bold text-2xl">Overview</h1>
-      <div className="pt-3 sm:pl-5 sm:pr-2 py-4 grid sm:grid-cols-4 grid-cols-2 items-center sm:gap-7 gap-2">
+      <div className="pt-3  py-4 grid sm:grid-cols-4 grid-cols-2 items-center sm:gap-7 gap-2">
         <div className="bg-blue-200 font-sans p-3.5 rounded-md">
           <p className="text-blue-900 sm:text-[16px] text-sm font-semibold">Total Goals</p>
           <span className="text-blue-900 sm:text-4xl text-[30px] font-bold">

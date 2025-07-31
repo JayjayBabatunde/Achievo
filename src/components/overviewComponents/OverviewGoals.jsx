@@ -100,7 +100,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
   const visibleGoals = uniqueGoals.filter((goal) => !goal.deleted);
 
   return (
-    <div className="font-sans m-2 grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mt-6 gap-5 w-full justify-start">
+    <div className="font-sans m-2 md:px-5 sm:pe-2 pe-3 grid md:grid-cols-2 grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 mt-6 gap-5 w-full justify-start">
       {visibleGoals.map((goal) => (
         <div
           key={goal.id}
@@ -143,7 +143,7 @@ export default function OverviewGoals({ goals = [], setGoals }) {
                 Due {new Date(goal.deadline).toDateString()}
               </span>
             </div>
-            <span className="text-gray-700 text-[14px]">{goal.description}</span>
+            <span className="text-[14px]">{goal.description}</span>
 
             <div className="flex justify-between items-center">
               <input

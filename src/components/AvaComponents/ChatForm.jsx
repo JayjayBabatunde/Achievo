@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { FaRegPaperPlane } from "react-icons/fa";
 
 function ChatForm({ onUserSubmit }) {
     const inputRef = useRef();
@@ -39,18 +40,20 @@ function ChatForm({ onUserSubmit }) {
         <form className="flex gap-2 items-end" onSubmit={handleFormSubmit}>
             <textarea
                 ref={inputRef}
-                rows={1}
-                className="flex-1 px-4 py-2 border border-teal-500 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-teal-600 resize-none hide-scrollbar max-h-32"
+                rows={4}
+                className="flex-1 px-4 py-2 bg-transparent border border-gray-300 rounded-lg resize-none hide-scrollbar max-h-32"
                 placeholder="Ask Ava about your Goals..."
                 onInput={handleInput}
             />
-            <button
-                type="submit"
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-500 h-10"
-                style={{ minHeight: 40 }}
-            >
-                Send
-            </button>
+            <div className="relative">
+                <button
+                    type="submit"
+                    className="flex justify-center items-center h-7 w-7 bg-teal-600  rounded-full hover:bg-teal-500
+                    absolute right-5 bottom-3"
+                >
+                    <FaRegPaperPlane size={15} />
+                </button>
+            </div>
         </form>
     );
 }

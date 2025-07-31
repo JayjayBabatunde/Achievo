@@ -1,5 +1,5 @@
 import { FiThumbsUp, FiThumbsDown, FiVolume2, FiCopy, FiCheck, } from "react-icons/fi";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaRobot, FaStop, } from "react-icons/fa";
 
 
@@ -75,7 +75,7 @@ export default function ChatMessage({ chat, userName }) {
 
     return (
         !chat.hideInChat && (
-            <div className={`flex flex-col mb-7 ${chat.role === "model" ? "bot" : "user"}`}>
+            <div className={`flex flex-col mb-7 mb:mx-10 mx-0 ${chat.role === "model" ? "bot" : "user"}`}>
                 <div className={`flex items-start gap-2 w-full ${chat.role === "user" ? "justify-end" : "justify-start"}`}>
                     {chat.role !== "user" && (
                         <FaRobot size={22} className="text-teal-600 mt-1" />
@@ -85,22 +85,44 @@ export default function ChatMessage({ chat, userName }) {
                         px-4 py-2 rounded-lg
                         ${chat.role === "user"
                                 ? "bg-teal-600 text-white order-2"
-                                : `bg-gray-100 ${chat.isError ? "text-red-700 bg-red-200" : "text-gray-800"} order-1`
+                                : `bg-[#F0F0F0] text-[#4B5563] ${chat.isError ? "text-red-700 bg-red-200" : "text-gray-800"} order-1`
                             }
                         ${chat.role !== "user"
-                                ? "lg:max-w-[45%] max-w-[80%] sm:max-w-[80%]"
-                                : "lg:max-w-[30%] max-w-[50%] sm:max-w-[50%]"
+                                ? "lg:max-w-[55%] max-w-[90%] sm:max-w-[80%]"
+                                : "lg:max-w-[70%] max-w-[70%] sm:max-w-[70%]"
                             }
                     `}
                     >
-                        <span>
-                            {(chat.text || "").split('\n').map((line, idx) => (
-                                <React.Fragment key={idx}>
-                                    {line}
-                                    <br />
-                                </React.Fragment>
-                            ))}
-                        </span>
+                        <div className="space-y-6">
+                            {String(chat.text || "")
+                                .split(/\n\s*\n/) // split into paragraph blocks
+                                .map((paragraph, idx) => {
+                                    const trimmed = paragraph.trim();
+                                    const isList = trimmed.match(/^(\d+\.)|(\* )/gm); // numbered or asterisk bullets
+
+                                    if (isList) {
+                                        return (
+                                            <div key={idx} className="space-y-4">
+                                                {trimmed.split('\n').map((line, i) => {
+                                                    const cleanedLine = line.trim().replace(/^\* /, "- "); // replace asterisks with hyphens
+                                                    return (
+                                                        <p key={i} className="ml-4 py-1 my-2 leading-relaxed">
+                                                            {cleanedLine}
+                                                        </p>
+                                                    );
+                                                })}
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <p key={idx} className="leading-relaxed text-base">
+                                            {trimmed}
+                                        </p>
+                                    );
+                                })}
+                        </div>
+
                     </div>
                     {chat.role === "user" && (
                         <img
