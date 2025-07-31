@@ -1,8 +1,8 @@
 import './App.css';
-import Benefits from './components/landingPageComponents/Benefits';
+// import Benefits from './components/landingPageComponents/Benefits';
 import Nav from './components/landingPageComponents/Nav';
 import Showcase from './components/landingPageComponents/Showcase';
-import Features from './components/landingPageComponents/Features'
+// import Features from './components/landingPageComponents/Features'
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
 
 
       <div className='pt-[50px]'>
-        <Benefits />
+        {/* <Benefits /> */}
       </div>
       {/* <Features /> */}
       {/* <Testimonial />
