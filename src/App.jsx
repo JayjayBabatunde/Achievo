@@ -19,7 +19,7 @@ function App() {
       <div className='pt-[50px]'>
         <Benefits />
       </div>
-      <Features />
+      {/* <Features /> */}
       {/* <Testimonial />
       <ContactForm />
       <Footer /> */}
