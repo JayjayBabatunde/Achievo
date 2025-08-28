@@ -11,10 +11,14 @@ import {
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import PropTypes from "prop-types";
+import { ThemeContext } from "../overviewComponents/ThemeContext";
+import { useContext } from "react";
+
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme } = useContext(ThemeContext);
 
   const navLinks = [
     {
@@ -29,8 +33,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     },
     {
       icon: <BarChart size={20} />,
-      name: "Track Goals",
-      path: "/dashboard/track-goals",
+      name: "Analytics",
+      path: "/dashboard/analytics",
     },
     {
       icon: <Users size={20} />,
@@ -57,8 +61,13 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   return (
     <aside
       className={`
-        ${isOpen ? "w-[210px]" : "w-0 sm:w-[80px]"} 
-        h-screen fixed overflow-hidden transition-all duration-500 ease-in-out border-r shadow-sm`}
+    ${isOpen ? "w-[210px]" : "w-0 sm:w-[80px]"} 
+    h-screen fixed z-20 overflow-hidden transition-all duration-500 ease-in-out shadow-md
+    ${theme === "light"
+          ? "bg-white text-black"
+          : "bg-gray-900 text-white"
+        }
+  `}
     >
       <nav className="h-full flex flex-col justify-between">
         <div>
@@ -76,8 +85,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               <li
                 key={index}
                 className={`flex items-center ${location.pathname === link.path
-                  ? "bg-teal-500 text-white"
-                  : "hover:bg-teal-500 hover:text-white"
+                  ? "bg-purple-600 text-white"
+                  : "hover:bg-purple-500 hover:text-white"
                   } 
                   ${isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"} 
                   p-1.5 rounded-sm cursor-pointer transition-all ease-out gap-2 font-sans text-[15px]`}
@@ -94,7 +103,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           <div
             className={`flex items-center ${isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"
               } 
-              bg-teal-500 p-1.5 rounded-sm text-white cursor-pointer gap-2`}
+              bg-purple-500 p-1.5 rounded-sm text-white cursor-pointer gap-2`}
           >
             <Plus size={20} />
             {isOpen && <span>Add Goal</span>}
@@ -104,7 +113,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
             onClick={handleLogout}
             className={`flex items-center ${isOpen ? "w-36 pe-3 justify-start" : "w-10 justify-center"
               } 
-              hover:bg-red-500 hover:text-white text-red-500 p-1.5 rounded-sm cursor-pointer gap-2`}
+              hover:bg-purple-500 hover:text-white text-red-500 p-1.5 rounded-sm cursor-pointer gap-2`}
           >
             <LogOut size={20} />
             {isOpen && <span>Logout</span>}

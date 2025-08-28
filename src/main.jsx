@@ -14,18 +14,23 @@ import Communities from './pages/Communities.jsx';
 import { ToastContainer } from 'react-toastify';
 import Settings from './pages/Settings.jsx';
 import AvaChatbot from './pages/AvaChatbot.jsx';
+import EmailVerification from './pages/EmailVerification.jsx';
+import Onboarding from './pages/Onboarding.jsx';
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
   { path: '/login', element: <Login /> },
   { path: '/signup', element: <Signup /> },
+  { path: '/verify-email', element: <EmailVerification /> },
+  { path: '/onboarding', element: <Onboarding /> },
+
   {
     path: '/dashboard',
     element: <Dashboard />,
     children: [
       { path: '', element: <OverviewPage /> },
       { path: 'goals', element: <Goals /> },
-      { path: 'track-goals', element: <TrackGoals /> },
+      { path: 'analytics', element: <TrackGoals /> },
       { path: 'communities', element: <Communities /> },
       { path: 'settings', element: <Settings /> },
       { path: 'Ava-assistant', element: <AvaChatbot /> },

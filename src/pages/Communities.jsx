@@ -1,4 +1,9 @@
+import { useState } from "react"
+import { CATEGORY_MAP } from "../CategoryList"
+import { Plus, Users } from "lucide-react";
+
 export default function Communities() {
+    const [active, setActive] = useState('All');
 
     const communities = [
         {
@@ -46,25 +51,68 @@ export default function Communities() {
     ]
 
     return (
-        <div>
-            <div className="flex sm:flex-row flex-col justify-between items-center  p-3 rounded-md mb-3 h-max">
-                <h1 className="font-bold text-xl ">Join a Commmunity</h1>
+        <div className="min-h-screen px-4 sm:px-6 lg:px-8 max-w-[95%] mx-auto">
+            {/* Header Section */}
+            <div className="flex flex-col gap-6 sm:gap-8 justify-between items-center w-full text-center p-3 rounded-md mb-6 sm:mb-8 mt-10 sm:mt-16 lg:mt-20">
+                <div className="flex flex-col items-center w-full gap-3 sm:gap-4">
+                    <h1 className="font-bold text-2xl sm:text-3xl lg:text-4xl px-2">Community Hub</h1>
+                    <p className="text-sm sm:text-base lg:text-lg px-4 sm:px-8 lg:px-16 max-w-4xl">
+                        Discover and join communities that align with your goals and interests. Connect with like-minded individuals and grow together.
+                    </p>
+                </div>
 
-                <input className="rounded-md text-black border sm:w-[450px] w-full p-2 sm:mt-0 mt-5" type="search" placeholder="search community" />
+                <div className="flex flex-col gap-4 sm:gap-5 w-full justify-center items-center">
+                    {/* Search Input */}
+                    <input
+                        className="rounded-md text-black border w-full sm:w-[80%] lg:w-[60%] xl:w-[50%] p-2 sm:p-3 text-sm sm:text-base"
+                        type="search"
+                        placeholder="Search community..."
+                    />
+
+                    {/* Categories */}
+                    <div className="flex flex-wrap gap-2 sm:gap-3 justify-center items-center max-w-full">
+                        <button
+                            className={`border border-gray-200 rounded-md px-3 py-2 hover:bg-blue-500 hover:text-white transition-all duration-150 whitespace-nowrap text-sm sm:text-base ${active === 'All' ? 'bg-blue-500 text-white' : ''}`}
+                            onClick={() => setActive('All')}
+                        >
+                            All
+                        </button>
+                        {Object.keys(CATEGORY_MAP).map((category) => (
+                            <button
+                                key={category}
+                                value={category}
+                                className={`border border-gray-200 rounded-md px-3 py-2 hover:bg-blue-500 hover:text-white transition-all duration-150 whitespace-nowrap text-sm sm:text-base max-w-[140px] overflow-hidden text-ellipsis ${active === category ? 'bg-blue-500 text-white' : ''}`}
+                                onClick={() => setActive(category)}
+                                title={category}
+                            >
+                                {category}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 mt-4 gap-4">
+            {/* Communities Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 pb-8 sm:pb-12">
                 {communities.map((community, index) => (
-                    <div key={index}>
-                        <div className="border rounded-md">
-                            <img className="w-full h-40 object-cover rounded-md" src={community.image} alt="image" />
-                            <div className="p-3 flex flex-col gap-2">
-                                <h3 className="font-bold text-[17px]">{community.name}</h3>
-                                <p className="text-[14px]">{community.description}</p>
-                                <div className="flex justify-between my-2 items-center">
-                                    <span className="text-[14px] text-gray-600 font-semibold">{community.members}</span>
-                                    <button className="bg-teal-500 rounded-md w-[140px] px-3 py-1 text-white">Join</button>
-                                </div>
+                    <div key={index} className="w-full">
+                        <div className="border rounded-lg sm:rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col">
+                            <img
+                                className="w-full h-32 sm:h-36 lg:h-40 object-cover rounded-t-lg sm:rounded-t-xl"
+                                src={community.image}
+                                alt={community.name}
+                            />
+                            <div className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3 flex-grow">
+                                <h3 className="font-bold text-base sm:text-lg line-clamp-2">{community.name}</h3>
+                                <span className="text-sm sm:text-[16px] text-gray-500 font-semibold flex items-center gap-1">
+                                    <Users size={14} className="sm:w-4 sm:h-4" />
+                                    {community.members}
+                                </span>
+                                <p className="text-sm sm:text-[16px] text-gray-500 line-clamp-2 flex-grow">{community.description}</p>
+                                <button className="bg-purple-700 hover:bg-purple-600 transition-all duration-150 rounded-md w-full p-2 sm:p-3 text-white flex items-center justify-center gap-2 mt-2 text-sm sm:text-base font-medium">
+                                    <Plus size={16} className="sm:w-5 sm:h-5" />
+                                    Join Community
+                                </button>
                             </div>
                         </div>
                     </div>

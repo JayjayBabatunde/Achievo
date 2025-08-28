@@ -1,5 +1,5 @@
 
-export default function GoalHeader({ search, setSearch }) {
+export default function SearchGoal({ search, setSearch }) {
   return (
     <div className='w-full sm:p-4  transition-all duration-500 ease-in-out'>
       <div className="flex justify-center items-start md:items-center p-2 mt-6 gap-4">

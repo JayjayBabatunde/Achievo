@@ -10,14 +10,14 @@ const Modal = ({ isOpen, onclose, children }) => {
       onClick={onclose}
     >
       <div
-        className="bg-white sm:w-[500px] w-full m-10 sm:m-0 rounded-lg shadow-lg p-6"
+        className="relative bg-white sm:w-[500px] w-full m-10 sm:m-0 rounded-lg shadow-lg p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-3 right-6 text-white hover:text-gray-600"
+          className="absolute top-3 right-3 text-black hover:text-gray-600"
           onClick={onclose}
         >
-          <X size={30} />
+          <X size={24} />
         </button>
         {children}
       </div>
@@ -26,8 +26,6 @@ const Modal = ({ isOpen, onclose, children }) => {
 };
 
 export default Modal;
-
-
 
 Modal.propTypes = {
   isOpen: PropTypes.bool.isRequired,

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import GoalHeader from "../components/overviewComponents/SearchGoal";
+// import GoalHeader from "../components/overviewComponents/SearchGoal";
 import Overview from "../components/overviewComponents/Overview";
 import OverviewGoals from "../components/overviewComponents/OverviewGoals";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import Loader from "../components/goalsComponent/Loader";
 
 export default function OverviewPage() {
-  const [search, setSearch] = useState("")
+  // const [search, setSearch] = useState("")
   const [goals, setGoals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { theme } = useContext(ThemeContext);
@@ -55,27 +55,23 @@ export default function OverviewPage() {
   }
 
   return (
-    <div className={`${theme === "light" ? "bg-white text-black" : "text-white"} min-h-screen`}>
+    <div className={`${theme === "light" ? "text-black" : "text-white"} min-h-screen`}>
       <Overview goals={goals} />
-      <GoalHeader search={search} setSearch={setSearch} />
+      {/* <GoalHeader search={search} setSearch={setSearch} /> */}
+      <div className="flex justify-between items-center mt-4 sm:mx-7 mx-2">
+        <h3 className="font-semibold text-xl">Current Goals</h3>
+
+        <span
+          className={`hover:text-blue-400 text-blue-600 transition duration-200 px-2.5 py-1.5 rounded-sm text-center ${theme === "light" ? "text-black" : "text-white"}`}
+        >
+          <Link to="/dashboard/goals">View All Goals</Link>
+        </span>
+      </div>
       <OverviewGoals
-        goals={goals.filter((goal) => {
-          const title = goal.title || "";
-          const description = goal.description || "";
-          return (
-            title.toLowerCase().includes(search.toLowerCase()) ||
-            description.toLowerCase().includes(search.toLowerCase())
-          );
-        })}
+        goals={goals}
         setGoals={setGoals}
       />
-      <div className="flex justify-center items-center mt-4">
-        <button
-          className={`hover:bg-blue-600 transition duration-200 px-2.5 py-1.5 rounded-sm text-center ${theme === "light" ? "text-black" : "text-white"}`}
-        >
-          <Link to="/dashboard/goals">See more...</Link>
-        </button>
-      </div>
+
     </div>
   );
 }
