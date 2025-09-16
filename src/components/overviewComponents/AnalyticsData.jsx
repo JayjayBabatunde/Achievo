@@ -7,6 +7,7 @@ const AnalyticsDashboard = ({ goals = [] }) => {
     const [monthlyData, setMonthlyData] = useState([]);
     const { theme } = useContext(ThemeContext);
 
+
     // Calculate monthly success rates when goals change
     useEffect(() => {
         const calculateMonthlyData = () => {
@@ -121,74 +122,74 @@ const AnalyticsDashboard = ({ goals = [] }) => {
     const currentMonthBg = theme === 'dark' ? 'bg-purple-500/20' : 'bg-purple-100';
 
     return (
-        <div className={`min-h-screen p-6 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
+        <div className={`min-h-screen p-3 sm:p-4 lg:p-6 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
             <div className="max-w-full mx-auto">
                 {/* Header */}
-                <div className="mb-8">
-                    <h1 className={`text-4xl font-bold mb-2 flex items-center gap-3 ${textPrimary}`}>
+                <div className="mb-6 sm:mb-8">
+                    <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 flex items-center gap-2 sm:gap-3 ${textPrimary}`}>
                         Analytics
                     </h1>
-                    <p className={`${textSecondary} text-lg`}>Track your monthly goal completion rates based on deadline dates - showing what percentage of goals due each month were actually completed</p>
+                    <p className={`${textSecondary} text-sm sm:text-base lg:text-lg`}>Track your monthly goal completion rates based on deadline dates - showing what percentage of goals due each month were actually completed</p>
                 </div>
 
                 {/* Key Metrics Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+                    <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 border ${cardBorder}`}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className={`${textSecondary} text-sm font-medium`}>Current Month</p>
-                                <p className={`text-3xl font-bold ${textPrimary}`}>{currentMonthData.successRate}%</p>
-                                <p className="text-purple-300 text-sm">{new Date().toLocaleDateString('en-US', { month: 'long' })} Deadline Success</p>
+                                <p className={`${textSecondary} text-xs sm:text-sm font-medium`}>Current Month</p>
+                                <p className={`text-lg sm:text-2xl lg:text-3xl font-bold ${textPrimary}`}>{currentMonthData.successRate}%</p>
+                                <p className="text-purple-300 text-xs sm:text-sm">{new Date().toLocaleDateString('en-US', { month: 'long' })} Deadline Success</p>
                             </div>
-                            <Calendar className="text-purple-400 w-8 h-8" />
+                            <Calendar className="text-purple-400 w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
                         </div>
                     </div>
 
-                    <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
+                    <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 border ${cardBorder}`}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className={`${textSecondary} text-sm font-medium`}>Average Rate</p>
-                                <p className={`text-3xl font-bold ${textPrimary}`}>{averageSuccessRate}%</p>
-                                <p className="text-green-300 text-sm">Year-to-Date Average</p>
+                                <p className={`${textSecondary} text-xs sm:text-sm font-medium`}>Average Rate</p>
+                                <p className={`text-lg sm:text-2xl lg:text-3xl font-bold ${textPrimary}`}>{averageSuccessRate}%</p>
+                                <p className="text-green-300 text-xs sm:text-sm">Year-to-Date Average</p>
                             </div>
-                            <TrendingUp className="text-green-400 w-8 h-8" />
+                            <TrendingUp className="text-green-400 w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
                         </div>
                     </div>
 
-                    <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
+                    <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 border ${cardBorder}`}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className={`${textSecondary} text-sm font-medium`}>Best Month</p>
-                                <p className={`text-3xl font-bold ${textPrimary}`}>{bestMonth.successRate}%</p>
-                                <p className="text-yellow-300 text-sm">{bestMonth.month} - Peak Performance</p>
+                                <p className={`${textSecondary} text-xs sm:text-sm font-medium`}>Best Month</p>
+                                <p className={`text-lg sm:text-2xl lg:text-3xl font-bold ${textPrimary}`}>{bestMonth.successRate}%</p>
+                                <p className="text-yellow-300 text-xs sm:text-sm">{bestMonth.month} - Peak Performance</p>
                             </div>
-                            <Award className="text-yellow-400 w-8 h-8" />
+                            <Award className="text-yellow-400 w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
                         </div>
                     </div>
 
-                    <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
+                    <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 border ${cardBorder}`}>
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className={`${textSecondary} text-sm font-medium`}>Total Completed</p>
-                                <p className={`text-3xl font-bold ${textPrimary}`}>{totalCompletedGoals}</p>
-                                <p className="text-blue-300 text-sm">Out of {totalGoals} due goals</p>
+                                <p className={`${textSecondary} text-xs sm:text-sm font-medium`}>Total Completed</p>
+                                <p className={`text-lg sm:text-2xl lg:text-3xl font-bold ${textPrimary}`}>{totalCompletedGoals}</p>
+                                <p className="text-blue-300 text-xs sm:text-sm">Out of {totalGoals} due goals</p>
                             </div>
-                            <Target className="text-blue-400 w-8 h-8" />
+                            <Target className="text-blue-400 w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
                         </div>
                     </div>
                 </div>
 
                 {/* Charts Section */}
                 {monthlyData.length > 0 && monthlyData.some(month => month.totalGoals > 0) && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
                         {/* Bar Chart */}
-                        <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
-                            <h3 className={`text-xl font-semibold mb-4 ${textPrimary}`}>Monthly Deadline Success Rates</h3>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={monthlyData}>
+                        <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border ${cardBorder}`}>
+                            <h3 className={`text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 ${textPrimary}`}>Monthly Deadline Success Rates</h3>
+                            <ResponsiveContainer width="100%" height={250}>
+                                <BarChart data={monthlyData} margin={{ top: 5, right: 0, left: -25, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                                    <XAxis dataKey="month" stroke={chartAxisColor} />
-                                    <YAxis stroke={chartAxisColor} />
+                                    <XAxis dataKey="month" stroke={chartAxisColor} fontSize={12} />
+                                    <YAxis stroke={chartAxisColor} fontSize={12} />
                                     <Tooltip
                                         contentStyle={{
                                             backgroundColor: tooltipBg,
@@ -215,13 +216,13 @@ const AnalyticsDashboard = ({ goals = [] }) => {
                         </div>
 
                         {/* Line Chart */}
-                        <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
-                            <h3 className={`text-xl font-semibold mb-4 ${textPrimary}`}>Deadline Performance Trend</h3>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={monthlyData}>
+                        <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border ${cardBorder}`}>
+                            <h3 className={`text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 ${textPrimary}`}>Deadline Performance Trend</h3>
+                            <ResponsiveContainer width="100%" height={250}>
+                                <LineChart data={monthlyData} margin={{ top: 5, right: 0, left: -25, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                                    <XAxis dataKey="month" stroke={chartAxisColor} />
-                                    <YAxis stroke={chartAxisColor} />
+                                    <XAxis dataKey="month" stroke={chartAxisColor} fontSize={12} />
+                                    <YAxis stroke={chartAxisColor} fontSize={12} />
                                     <Tooltip
                                         contentStyle={{
                                             backgroundColor: tooltipBg,
@@ -245,13 +246,13 @@ const AnalyticsDashboard = ({ goals = [] }) => {
                         </div>
 
                         {/* Goals Volume Chart */}
-                        <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
-                            <h3 className={`text-xl font-semibold mb-4 ${textPrimary}`}>Goals Volume by Deadline</h3>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={monthlyData}>
+                        <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border ${cardBorder}`}>
+                            <h3 className={`text-base sm:text-lg lg:text-xl font-semibold mb-3 sm:mb-4 ${textPrimary}`}>Goals Volume by Deadline</h3>
+                            <ResponsiveContainer width="100%" height={250}>
+                                <BarChart data={monthlyData} margin={{ top: 5, right: 0, left: -25, bottom: 5 }}>
                                     <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
-                                    <XAxis dataKey="month" stroke={chartAxisColor} />
-                                    <YAxis stroke={chartAxisColor} />
+                                    <XAxis dataKey="month" stroke={chartAxisColor} fontSize={12} />
+                                    <YAxis stroke={chartAxisColor} fontSize={12} />
                                     <Tooltip
                                         contentStyle={{
                                             backgroundColor: tooltipBg,
@@ -294,38 +295,38 @@ const AnalyticsDashboard = ({ goals = [] }) => {
                 )}
 
                 {/* Detailed Monthly Breakdown */}
-                <div className={`${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
-                    <h3 className={`text-xl font-semibold mb-6 ${textPrimary}`}>Detailed Monthly Breakdown (By Deadline)</h3>
+                <div className={`${cardBg} backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border ${cardBorder}`}>
+                    <h3 className={`text-base sm:text-lg lg:text-xl font-semibold mb-4 sm:mb-6 ${textPrimary}`}>Detailed Monthly Breakdown (By Deadline)</h3>
                     <div className="overflow-x-auto">
-                        <table className="w-full">
+                        <table className="w-full min-w-[600px]">
                             <thead>
                                 <tr className={`border-b ${tableBorder}`}>
-                                    <th className={`text-left py-3 px-4 font-medium ${textSecondary}`}>Month</th>
-                                    <th className={`text-left py-3 px-4 font-medium ${textSecondary}`}>Completed Goals</th>
-                                    <th className={`text-left py-3 px-4 font-medium ${textSecondary}`}>Goals Due</th>
-                                    <th className={`text-left py-3 px-4 font-medium ${textSecondary}`}>Success Rate</th>
-                                    <th className={`text-left py-3 px-4 font-medium ${textSecondary}`}>Performance</th>
+                                    <th className={`text-left py-2 sm:py-3 px-2 sm:px-4 font-medium ${textSecondary} text-xs sm:text-sm`}>Month</th>
+                                    <th className={`text-left py-2 sm:py-3 px-2 sm:px-4 font-medium ${textSecondary} text-xs sm:text-sm`}>Completed Goals</th>
+                                    <th className={`text-left py-2 sm:py-3 px-2 sm:px-4 font-medium ${textSecondary} text-xs sm:text-sm`}>Goals Due</th>
+                                    <th className={`text-left py-2 sm:py-3 px-2 sm:px-4 font-medium ${textSecondary} text-xs sm:text-sm`}>Success Rate</th>
+                                    <th className={`text-left py-2 sm:py-3 px-2 sm:px-4 font-medium ${textSecondary} text-xs sm:text-sm`}>Performance</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {monthlyData.length > 0 ? monthlyData.map((month, index) => (
                                     <tr key={index} className={`border-b ${tableBorder} ${month.isCurrentMonth ? currentMonthBg : tableHover}`}>
-                                        <td className={`py-3 px-4 font-medium ${textPrimary}`}>
+                                        <td className={`py-2 sm:py-3 px-2 sm:px-4 font-medium ${textPrimary} text-sm`}>
                                             {month.month}
-                                            {month.isCurrentMonth && <span className="ml-2 text-xs bg-purple-500 text-white px-2 py-1 rounded-full">Current</span>}
+                                            {month.isCurrentMonth && <span className="ml-1 sm:ml-2 text-xs bg-purple-500 text-white px-1 sm:px-2 py-1 rounded-full">Current</span>}
                                         </td>
-                                        <td className={`py-3 px-4 ${textSecondary}`}>{month.completedGoals}</td>
-                                        <td className={`py-3 px-4 ${textSecondary}`}>{month.totalGoals}</td>
-                                        <td className="py-3 px-4">
-                                            <span className={`font-semibold ${month.successRate >= 80 ? 'text-green-400' :
+                                        <td className={`py-2 sm:py-3 px-2 sm:px-4 ${textSecondary} text-sm`}>{month.completedGoals}</td>
+                                        <td className={`py-2 sm:py-3 px-2 sm:px-4 ${textSecondary} text-sm`}>{month.totalGoals}</td>
+                                        <td className="py-2 sm:py-3 px-2 sm:px-4">
+                                            <span className={`font-semibold text-sm ${month.successRate >= 80 ? 'text-green-400' :
                                                 month.successRate >= 60 ? 'text-yellow-400' :
                                                     'text-red-400'
                                                 }`}>
                                                 {month.successRate}%
                                             </span>
                                         </td>
-                                        <td className="py-3 px-4">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${month.totalGoals === 0 ? 'bg-gray-500/20 text-gray-400' :
+                                        <td className="py-2 sm:py-3 px-2 sm:px-4">
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${month.totalGoals === 0 ? 'bg-gray-500/20 text-gray-400' :
                                                 month.successRate >= 80 ? 'bg-green-500/20 text-green-400' :
                                                     month.successRate >= 60 ? 'bg-yellow-500/20 text-yellow-400' :
                                                         'bg-red-500/20 text-red-400'
@@ -338,7 +339,7 @@ const AnalyticsDashboard = ({ goals = [] }) => {
                                     </tr>
                                 )) : (
                                     <tr>
-                                        <td colSpan="5" className={`py-8 text-center ${textSecondary}`}>
+                                        <td colSpan="5" className={`py-6 sm:py-8 text-center ${textSecondary} text-sm`}>
                                             No goals with deadlines found. Create some goals with deadlines to see analytics!
                                         </td>
                                     </tr>
@@ -348,20 +349,10 @@ const AnalyticsDashboard = ({ goals = [] }) => {
                     </div>
                 </div>
 
-                {/* Additional Info Sections */}
-                <div className={`mt-8 ${cardBg} backdrop-blur-sm rounded-xl p-6 border ${cardBorder}`}>
-                    <h3 className={`text-lg font-semibold mb-3 ${textPrimary}`}>How Analytics Work</h3>
-                    <div className={`${textSecondary} space-y-2`}>
-                        <p>• <strong>Current View:</strong> Showing January - August 2025 data (current month: August)</p>
-                        <p>• <strong>Progressive Display:</strong> September will appear on September 1st, October on October 1st, etc.</p>
-                        <p>• <strong>Success Rate:</strong> Percentage of goals with deadlines in each month that were completed</p>
-                        <p>• <strong>New Year Behavior:</strong> On January 1, 2026, will reset to show only January 2026</p>
-                    </div>
-                </div>
 
-                <div className={`mt-6 bg-blue-500/10 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20`}>
-                    <h3 className={`text-lg font-semibold mb-3 text-blue-300`}>Tip</h3>
-                    <p className={`${textSecondary}`}>
+                <div className={`mt-4 sm:mt-6 bg-blue-500/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 border border-blue-500/20`}>
+                    <h3 className={`text-base sm:text-lg font-semibold mb-3 text-blue-300`}>Tip</h3>
+                    <p className={`${textSecondary} text-sm sm:text-base`}>
                         Set realistic deadlines for your goals to get meaningful analytics. The dashboard tracks completion rates based on when goals were originally due, helping you identify patterns in your productivity.
                     </p>
                 </div>

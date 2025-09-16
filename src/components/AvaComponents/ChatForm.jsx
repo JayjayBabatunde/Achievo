@@ -37,21 +37,20 @@ function ChatForm({ onUserSubmit }) {
     };
 
     return (
-        <form className="flex gap-2 items-end" onSubmit={handleFormSubmit}>
-            <textarea
-                ref={inputRef}
-                rows={4}
-                className="flex-1 px-4 py-2 bg-transparent border border-gray-300 rounded-lg resize-none hide-scrollbar max-h-32"
-                placeholder="Ask Ava about your Goals..."
-                onInput={handleInput}
-            />
-            <div className="relative">
+        <form className="flex items-end gap-2" onSubmit={handleFormSubmit}>
+            <div className="flex-1 relative">
+                <textarea
+                    ref={inputRef}
+                    rows={3}
+                    className="w-full px-4 py-3 pr-12 bg-transparent border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-purple-400 focus:border-purple-400 resize-none hide-scrollbar max-h-16 text-[15px] placeholder:text-gray-400"
+                    placeholder="Ask Ava about your goals..."
+                    onInput={handleInput}
+                />
                 <button
                     type="submit"
-                    className="flex justify-center items-center h-7 w-7 bg-teal-600  rounded-full hover:bg-teal-500
-                    absolute right-5 bottom-3"
+                    className="absolute bottom-2.5 right-2.5 h-9 w-9 rounded-full bg-purple-600 text-white flex items-center justify-center hover:bg-purple-500 shadow-sm"
                 >
-                    <FaRegPaperPlane size={15} />
+                    <FaRegPaperPlane size={14} />
                 </button>
             </div>
         </form>

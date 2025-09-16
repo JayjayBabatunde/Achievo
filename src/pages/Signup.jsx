@@ -227,12 +227,12 @@ export default function Signup() {
             </div>
 
             {/* Already have account */}
-            <div className="flex items-center justify-end pt-6">
-              <Link
+            <div className="flex items-center justify-end pt-6 font-semibold sm:text-[17px] text-sm gap-2">
+
+              Already have an account?  <Link
                 to="/login"
-                className="text-[#fc4c00] font-semibold sm:text-[17px] text-sm hover:text-[#ff6e26] transition-colors"
-              >
-                Already have an account?
+                className="text-[#fc4c00] hover:text-[#ff6e26] transition-colors underline"
+              >Login
               </Link>
             </div>
 

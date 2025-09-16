@@ -10,7 +10,8 @@ export default function AiBot() {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="fixed bottom-6 right-6 bg-purple-700 hover:bg-purple-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center transition-transform duration-300"
+                    className="fixed bottom-6 right-6 bg-purple-700 hover:bg-purple-600 
+                    text-white w-11 h-11 p-1 rounded-full shadow-lg flex items-center justify-center transition-transform duration-300"
                 >
                     <Bot size={24} />
                 </button>

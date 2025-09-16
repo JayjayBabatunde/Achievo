@@ -38,6 +38,8 @@ export default function Dashboard() {
         }
     };
 
+    const hideOnAvaAssistant = location.pathname === "/dashboard/Ava-assistant";
+
     return (
         <div className={` ${theme === "light" ? "bg-white text-black" : "bg-gray-900 text-white"} w-full flex transition-all duration-500 ease-in-out min-h-screen relative`}>
             <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -48,13 +50,19 @@ export default function Dashboard() {
                 </div>
 
                 {/* Floating Plus Button - always visible */}
-                <div className="fixed bottom-24 right-6 z-50">
-                    <div onClick={handlePlusClick} className="rounded-full bg-blue-600 w-14 h-14 flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-700 transition">
-                        <Plus size={40} color="white" />
+                {!hideOnAvaAssistant && (
+                    <div className="fixed bottom-20 right-6 z-50">
+                        <div
+                            onClick={handlePlusClick}
+                            className="rounded-full bg-blue-600 w-10 h-10 flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-700 transition"
+                        >
+                            <Plus size={25} color="white" />
+                        </div>
                     </div>
-                </div>
+                )}
 
-                <AiBot />
+                {/* AiBot - hidden on Ava Assistant page */}
+                {!hideOnAvaAssistant && <AiBot />}
             </div>
         </div>
     );

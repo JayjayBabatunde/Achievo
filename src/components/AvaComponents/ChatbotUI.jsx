@@ -3,7 +3,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import ChatMessage from "./ChatMessage";
 import { AchievoData } from "../../AchievoData";
 import { getUserContext } from "./utils/UserContext";
-import { db } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import {
     doc,
     setDoc,
@@ -117,16 +118,19 @@ export default function ChatbotUI() {
     };
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const user = await getUserContext();
-            if (user) {
-                setUserName(user.name || "User");
-                setUserId(user.uid);
+        // Ensure we wait for Firebase auth to initialize on first load
+        setIsLoading(true);
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                const user = await getUserContext();
+                setUserName(user?.name || "User");
+                setUserId(user?.uid || firebaseUser.uid);
             } else {
-                setIsLoading(false); // stop loading even if no user
+                setUserId(null);
+                setIsLoading(false);
             }
-        };
-        fetchUser();
+        });
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
@@ -233,21 +237,50 @@ export default function ChatbotUI() {
         }
     }, [chatHistory]);
 
+    const greetingMesage = () => {
+        const today = new Date();
+        const currentHour = today.getHours();
+        let greeting;
+        if (currentHour < 12) {
+            greeting = 'Good Morning';
+        } else if (currentHour < 18) {
+            greeting = 'Good Afternoon';
+        } else {
+            greeting = 'Good Evening';
+        }
+        return greeting;
+    }
+
+    if (isLoading) {
+        return;
+    }
+
     return (
-        <div className="flex flex-col h-[85vh] w-full max-w-full mx-auto pt-3 rounded-lg overflow-hidden">
-            <div ref={chatBodyRef} className="flex-1 overflow-y-auto hide-scrollbar pe-5">
-                {isLoading ? (
-                    <div className="text-center py-4">Loading chat...</div>
-                ) : (
-                    chatHistory.map((chat, index) => (
-                        <ChatMessage key={index} chat={chat} userName={userName} />
-                    ))
+        <div className="min-h-[89vh] w-full max-w-full mx-auto py-3">
+            <div className="backdrop-blur sm:border-[0.3px] rounded-2xl sm:shadow-sm flex flex-col h-[89vh] overflow-hidden">
+                {/* Introduction Good morning User */}
+                {chatHistory.filter(m => m.role === 'user').length === 0 && (
+                    <div className="flex flex-col gap-5 items-center justify-center h-screen">
+                        <h2 className="sm:text-[2.8rem] text-xl text-center font-bold">{greetingMesage()}, {userName}</h2>
+                        <h3 className="sm:text-4xl text-center text-xl">Where should we begin?</h3>
+                    </div>
                 )}
-            </div>
-            <div className="md:p-4 p-1 md:border-t border-t-0 md:border-gray-300 ">
-                <ChatForm
-                    onUserSubmit={handleUserSubmit}
-                />
+
+                {/* Messages */}
+                <div ref={chatBodyRef} className="flex-1 overflow-y-auto hide-scrollbar px-3 md:px-6 py-4">
+                    {isLoading ? (
+                        <div className="text-center py-8 text-gray-500">Loading chat...</div>
+                    ) : (
+                        chatHistory.map((chat, index) => (
+                            <ChatMessage key={index} chat={chat} userName={userName} />
+                        ))
+                    )}
+                </div>
+
+                {/* Input */}
+                <div className="px-2 md:px-6 py-3 border-t border-gray-200">
+                    <ChatForm onUserSubmit={handleUserSubmit} />
+                </div>
             </div>
         </div>
     );

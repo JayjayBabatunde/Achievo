@@ -83,34 +83,34 @@ export default function DashboardNav({ onSearch }) {
   return (
     <>
       {/* Top Navbar */}
-      <div className={`w-full p-4 py-5 shadow-sm fixed top-0 left-0 z-10 ${theme === 'light' ? 'bg-white' : 'bg-gray-900'}`}>
-        <div className="flex items-center justify-between sm:justify-end pe-4">
-          <div className="flex items-center gap-5">
-            {/* Search toggle */}
-            <div className="relative">
-              <Search size={18} className="cursor-pointer" onClick={() => setShowSearch(prev => !prev)} />
+      <div className={`w-full fixed top-0 left-0 z-10 ${theme === 'light' ? 'bg-white/80' : 'bg-gray-900/80'} backdrop-blur shadow-sm p-1 border-gray-200 dark:border-gray-800`}>
+        <div className="max-w-full px-4 sm:px-6">
+          <div className="h-14 flex items-center justify-between">
+            {/* Brand + Mobile Menu */}
+            <div className="flex items-center gap-3">
+              <span className="sm:hidden inline-flex items-center justify-center h-8 w-8 rounded-md border border-gray-300 dark:border-gray-700 cursor-pointer" onClick={toggleSidebar}>
+                {isSidebarOpen ? <X size={18} /> : <Menu size={18} />}
+              </span>
             </div>
 
-            {/* Theme toggle */}
-            <span className="cursor-pointer" onClick={toggleTheme}>
-              {theme === 'light' ? <Sun size={18} /> : <Moon size={18} />}
-            </span>
-
-            {/* Notifications */}
-            <Bell size={18} className="cursor-pointer" />
-
-            {/* Profile */}
-            <img
-              className="sm:w-7 sm:h-7 w-5 h-5 rounded-full object-cover bg-gray-300 cursor-pointer"
-              src={photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
-              alt="Profile img"
-            />
+            {/* Right Controls */}
+            <div className="flex items-center gap-3">
+              <button className="relative inline-flex items-center justify-center h-8 w-8 dark:border-gray-700 " onClick={() => setShowSearch(prev => !prev)}>
+                <Search size={18} />
+              </button>
+              <button className="inline-flex items-center justify-center h-8 w-8 dark:border-gray-700  transition" onClick={toggleTheme}>
+                {theme === 'light' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+              <button className="inline-flex items-center justify-center h-8 w-8 dark:border-gray-700">
+                <Bell size={18} />
+              </button>
+              <img
+                className="sm:w-8 sm:h-8 w-7 h-7 rounded-full object-cover bg-gray-300 ring-1 ring-gray-300 dark:ring-gray-700"
+                src={photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"}
+                alt="Profile img"
+              />
+            </div>
           </div>
-
-          {/* Mobile sidebar toggle */}
-          <span className="cursor-pointer sm:hidden z-50" onClick={toggleSidebar}>
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </span>
         </div>
       </div>
 
@@ -142,26 +142,68 @@ export default function DashboardNav({ onSearch }) {
       )}
 
       {/* Sidebar Links for Mobile Screens */}
-      {isSidebarOpen && (
-        <div className={`fixed top-0 left-0 w-[100%] p-10 h-full shadow-lg z-40 sm:hidden ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
-          <ul className="flex flex-col p-4 gap-10">
-            {navLinks.map((link, index) => (
-              <li key={index} className="flex items-center gap-2 cursor-pointer hover:bg-blue-500 p-2 rounded-sm"
-                onClick={() => { navigate(link.path); setIsSidebarOpen(false); }}>
-                {link.icon}<span>{link.name}</span>
-              </li>
-            ))}
-
-            <div className="flex items-center bg-blue-500 p-1.5 rounded-sm text-white cursor-pointer gap-2">
-              <Plus size={20} /><span>Add Goal</span>
+      {/* Mobile Drawer */}
+      <div className={`fixed inset-0 z-30 sm:hidden ${isSidebarOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/40 transition-opacity ${isSidebarOpen ? 'opacity-100' : 'opacity-0'}`}
+          onClick={toggleSidebar}
+        />
+        {/* Drawer */}
+        <div
+          className={`absolute top-0 left-0 h-full w-[82%] max-w-xs ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-black'
+            } shadow-xl transform transition-transform duration-300 ease-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+        >
+          <div className="p-4 pt-6 flex items-center justify-between border-b dark:border-gray-300">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600" />
+              <span className="font-semibold">Achievo</span>
             </div>
+            <button
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md hover:text-gray-400"
+              onClick={toggleSidebar}
+            >
+              <X size={18} />
+            </button>
+          </div>
 
-            <div onClick={handleLogout} className="flex items-center hover:bg-red-500 hover:text-white text-red-500 p-1.5 rounded-sm cursor-pointer gap-2">
-              <LogOut size={20} /><span>Logout</span>
+          {/* Sidebar Content */}
+          <div className="flex flex-col h-[93vh] justify-between">
+            {/* Nav Links */}
+            <ul className="flex flex-col p-4 gap-6 mt-6">
+              {navLinks.map((link, index) => (
+                <li
+                  key={index}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-500 hover:text-white transition cursor-pointer"
+                  onClick={() => {
+                    navigate(link.path);
+                    setIsSidebarOpen(false);
+                  }}
+                >
+                  {link.icon}
+                  <span className="text-sm font-medium">{link.name}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Bottom Actions */}
+            <div className="flex flex-col p-4 gap-4 mb-6">
+              <button className="flex items-center gap-2 px-3 py-3 rounded-md text-white bg-purple-500 hover:bg-purple-600 transition">
+                <Plus size={18} />
+                <span className="text-sm font-medium">Add Goal</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-start gap-2 px-3 py-3 rounded-lg text-red-600 hover:bg-purple-200 transition"
+              >
+                <LogOut size={18} />
+                <span className="text-sm font-medium">Logout</span>
+              </button>
             </div>
-          </ul>
+          </div>
         </div>
-      )}
+      </div>
     </>
   );
 }
